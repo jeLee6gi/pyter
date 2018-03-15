@@ -9,16 +9,14 @@ import os
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
-install_requires = ['distribute']
-if sys.hexversion < 0x2070000:
-    install_requires += ['argparse']
+install_requires = []
 setup(name='pyter',
-      version='0.2.2.1',
+      version='0.2.2.2',
       description='Simple library to evaluate the Translation Error Rate',
       long_description=read('README.rst'),
       author='Hiroyuki Tanaka',
       author_email='aflc0x@gmail.com',
-      url='https://github.com/aflc/pyter',
+      url='https://github.com/jeLee6gi/pyter',
       platforms = "any",
       packages=['pyter'],
       entry_points=dict(console_scripts=['pyter=pyter:main']),

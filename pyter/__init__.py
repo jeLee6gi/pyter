@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-from __future__ import division, print_function
+
 """ Copyright (c) 2011 Hiroyuki Tanaka. All rights reserved."""
 import itertools as itrt
 from pyter import util
@@ -53,16 +53,16 @@ def _shift(iwords, rwords, mtd):
 
 
 def _findpairs(ws1, ws2):
-    u""" yield the tuple of (ws1_start_point, ws2_start_point, length)
+    """ yield the tuple of (ws1_start_point, ws2_start_point, length)
     So ws1[ws1_start_point:ws1_start_point+length] == ws2[ws2_start_point:ws2_start_point+length]
     """
-    for i1, i2 in itrt.product(range(len(ws1)), range(len(ws2))):
+    for i1, i2 in itrt.product(list(range(len(ws1))), list(range(len(ws2)))):
         if i1 == i2:
             continue  # take away if there is already in the same position
         if ws1[i1] == ws2[i2]:
             # counting
             length = 1
-            for j1, j2 in zip(range(i1 + 1, len(ws1)), range(i2 + 1, len(ws2))):
+            for j1, j2 in zip(list(range(i1 + 1, len(ws1))), list(range(i2 + 1, len(ws2)))):
                 if ws1[j1] == ws2[j2]:
                     length += 1
                 else:
@@ -80,7 +80,7 @@ def edit_distance(s, t):
     l[0] = [x for x, _ in enumerate(l[0])]
     for x, y in enumerate(l):
         y[0] = x
-    for i, j in itrt.product(range(1, len(s) + 1), range(1, len(t) + 1)):
+    for i, j in itrt.product(list(range(1, len(s) + 1)), list(range(1, len(t) + 1))):
         l[i][j] = min(l[i - 1][j] + 1,
                       l[i][j - 1] + 1,
                       l[i - 1][j - 1] + (0 if s[i - 1] == t[j - 1] else 1))
@@ -88,7 +88,7 @@ def edit_distance(s, t):
 
 
 class CachedEditDistance(object):
-    u""" 編集距離のキャッシュ版
+    """ 編集距離のキャッシュ版
     一回計算した途中結果を保存しておいて再利用する
     以前計算したリストをtrie木で保存して、重複する演算を省略する
     trieはネストした辞書で表現し、値に[次の辞書, キャッシュされた値]の長さ２のリストを用いる
@@ -106,7 +106,7 @@ class CachedEditDistance(object):
         return score
 
     def _edit_distance(self, iwords, spos, cache):
-        u""" sposが0の場合はキャッシュなし。
+        """ sposが0の場合はキャッシュなし。
         """
         if cache is None:
             cache = [tuple(range(len(self.rwds) + 1))]
@@ -115,7 +115,7 @@ class CachedEditDistance(object):
         l = cache + [list(self.list_for_copy) for _ in range(len(iwords) - spos)]
         # 先頭はキャッシュなので飛ばす。iwordsはsposから、lは1から計算
         assert len(l) - 1 == len(iwords) - spos
-        for i, j in itrt.product(range(1, len(iwords) - spos + 1), range(len(self.rwds) + 1)):
+        for i, j in itrt.product(list(range(1, len(iwords) - spos + 1)), list(range(len(self.rwds) + 1))):
             if j == 0:
                 l[i][j] = l[i - 1][j] + 1
             else:
@@ -177,7 +177,7 @@ def main():
         print("Error: input file has {0} lines, but reference has {1} lines.".format(len(ilines), len(rlines)))
         sys.exit(1)
     scores = []
-    for lineno, (rline, iline) in enumerate(itertools.izip(ilines, rlines), start=1):
+    for lineno, (rline, iline) in enumerate(zip(ilines, rlines), start=1):
         if args.force_token_mode:
             rline, iline = rline.split(), iline.split()
         else:

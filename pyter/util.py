@@ -1,11 +1,11 @@
 # -*- coding:utf-8 -*-
-from __future__ import unicode_literals
+
 
 import re
 import unicodedata
 
 def preprocess_en(s):
-    u"""
+    """
     記号類: 同じものは固まる、違うものは離す
     * 特殊な用法は経験ベースでくっつける
     例: e.g., a.m., p.m., etc.
@@ -19,9 +19,9 @@ def preprocess_en(s):
     s = re.sub(r'\s+', r' ', s)  # スペースの個数正規化
     s = re.sub(r'(\d) ([.,]) (\d)', r'\1\2\3', s)  # 0 . 1 -> 0.1
     s = re.sub(r'(Dr|Jr|Prof|Rev|Gen|Mr|Mt|Mrs|Ms) .', r'\1.', s)  # Mr . -> Mr.
-    s = s.replace(u'e . g .', u'e.g.')
-    s = s.replace(u'i . e .', u'e.g.')
-    s = s.replace(u'U . S .', u'U.S.')
+    s = s.replace('e . g .', 'e.g.')
+    s = s.replace('i . e .', 'e.g.')
+    s = s.replace('U . S .', 'U.S.')
     return s
 
 def preprocess_ja(s):
